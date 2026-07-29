@@ -1,9 +1,9 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { FiArrowDown } from "react-icons/fi";
 import { gsap } from "gsap";
 import Magnetic from "../components/Magnetic";
 
-const PROJECTS = [
+const ALL_PROJECTS = [
   {
     id: 1,
     client: "Elysian Organic Tea",
@@ -31,12 +31,71 @@ const PROJECTS = [
     type: "3D Animation & Identity",
     image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
     link: "https://www.behance.net"
+  },
+  {
+    id: 5,
+    client: "Zenith Watch Co.",
+    type: "Brand Storytelling & Web",
+    image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80",
+    link: "https://www.behance.net"
+  },
+  {
+    id: 6,
+    client: "Nova Spark Energy",
+    type: "Packaging & Identity",
+    image: "https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=800&q=80",
+    link: "https://www.behance.net"
+  },
+  {
+    id: 7,
+    client: "Helix Smart Ring",
+    type: "UI/UX & Interactive Design",
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80",
+    link: "https://www.behance.net"
+  },
+  {
+    id: 8,
+    client: "Bloom Floral Studio",
+    type: "Identity & E-commerce",
+    image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=800&q=80",
+    link: "https://www.behance.net"
+  },
+  {
+    id: 9,
+    client: "Aura Skincare",
+    type: "Sustainable Packaging",
+    image: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=800&q=80",
+    link: "https://www.behance.net"
+  },
+  {
+    id: 10,
+    client: "Nexus Security",
+    type: "Corporate Branding",
+    image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80",
+    link: "https://www.behance.net"
+  },
+  {
+    id: 11,
+    client: "Solis Solar Panel",
+    type: "Clean Energy Identity",
+    image: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80",
+    link: "https://www.behance.net"
+  },
+  {
+    id: 12,
+    client: "Drift Coffee Roasters",
+    type: "Branding & Print",
+    image: "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=800&q=80",
+    link: "https://www.behance.net"
   }
 ];
 
-function ProjectCard({ project }) {
+function ProjectCard({ project, index }) {
   const cardRef = useRef(null);
   const imgRef = useRef(null);
+
+  // Slight alternating random-like rotations: e.g., -1.5, 1.5, -1.0, 1.2
+  const initialRotation = index % 4 === 0 ? -1.5 : index % 4 === 1 ? 1.5 : index % 4 === 2 ? -1.0 : 1.2;
 
   const handleMouseMove = (e) => {
     const card = cardRef.current;
@@ -49,12 +108,12 @@ function ProjectCard({ project }) {
     const xc = (x / width) - 0.5;
     const yc = (y / height) - 0.5;
 
-    // Dynamic rotation and minor translation based on cursor position
+    // Dynamic rotation relative to initial rotation, and translation based on cursor position
     gsap.to(card, {
-      rotate: xc * 4, // slight rotation up to 2 degrees
+      rotate: initialRotation + xc * 4, 
       x: xc * 12,
       y: yc * 12,
-      scale: 1.01,
+      scale: 1.02,
       duration: 0.3,
       ease: "power2.out"
     });
@@ -71,9 +130,9 @@ function ProjectCard({ project }) {
     const card = cardRef.current;
     if (!card) return;
 
-    // Bounce back to normal state
+    // Bounce back to normal state with initial rotation
     gsap.to(card, {
-      rotate: 0,
+      rotate: initialRotation,
       x: 0,
       y: 0,
       scale: 1,
@@ -96,6 +155,7 @@ function ProjectCard({ project }) {
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      style={{ transform: `rotate(${initialRotation}deg)` }}
       className="block bg-brand-white rounded-[24px] brutalist-border brutalist-shadow hover:brutalist-shadow-lg transition-shadow duration-300 ease-out overflow-hidden interactive-hover"
     >
       {/* Thumbnail Container */}
@@ -123,6 +183,35 @@ function ProjectCard({ project }) {
 }
 
 export default function ProjectsSection({ onScrollToServices }) {
+  const [visibleCount, setVisibleCount] = useState(4);
+  const triggerRef = useRef(null);
+
+  // Infinite Scroll Observer
+  useEffect(() => {
+    if (visibleCount >= ALL_PROJECTS.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          // Subtle delay before cards pop in for premium feel
+          setTimeout(() => {
+            setVisibleCount((prev) => Math.min(prev + 4, ALL_PROJECTS.length));
+          }, 350);
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "150px" // triggers load slightly before user reaches bottom
+      }
+    );
+
+    if (triggerRef.current) {
+      observer.observe(triggerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [visibleCount]);
+
   return (
     <section
       id="projects-section"
@@ -135,15 +224,25 @@ export default function ProjectsSection({ onScrollToServices }) {
         </div>
       </div>
 
-      {/* Project Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-6xl mx-auto w-full max-h-[58vh] overflow-y-auto pr-3 mb-12 brutalist-scrollbar p-2">
-        {PROJECTS.map((project) => (
-          <ProjectCard key={project.id} project={project} />
+      {/* Project Cards Grid - natural flow height */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 max-w-6xl mx-auto w-full mb-16 p-2">
+        {ALL_PROJECTS.slice(0, visibleCount).map((project, index) => (
+          <ProjectCard key={project.id} project={project} index={index} />
         ))}
       </div>
 
+      {/* Infinite Scroll Trigger Element */}
+      {visibleCount < ALL_PROJECTS.length && (
+        <div 
+          ref={triggerRef} 
+          className="w-full h-12 flex items-center justify-center mb-8"
+        >
+          <div className="w-8 h-8 border-4 border-brand-black border-t-brand-purple rounded-full animate-spin" />
+        </div>
+      )}
+
       {/* Bottom Left: Services Navigation Button */}
-      <div className="self-start z-50">
+      <div className="self-start z-40 mt-8">
         <Magnetic>
           <button
             onClick={onScrollToServices}

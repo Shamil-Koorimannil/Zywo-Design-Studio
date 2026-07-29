@@ -34,29 +34,32 @@ export default function WaveFooter({ onConnectClick }) {
       </div>
 
       {/* Main Footer Body */}
-      <div className="bg-brand-white w-full border-t-0 p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-4 h-auto md:h-[160px]">
-        {/* Left: Connect Button */}
+      <div className="bg-brand-white w-full border-t-0 px-8 py-12 md:px-16 md:py-16 flex flex-col md:flex-row items-center justify-between gap-10">
+        
+        {/* Left: Large Neo Brutalist button */}
         <div className="w-full md:w-auto flex justify-center md:justify-start">
           <Magnetic>
             <button
               onClick={onConnectClick}
               id="footer-connect-btn"
-              className="py-3 px-8 text-lg font-black bg-brand-white text-brand-black rounded-[16px] brutalist-border brutalist-shadow hover:brutalist-shadow-lg hover:-translate-y-1 transition-all duration-300 interactive-hover"
+              className="py-4 px-10 text-xl font-black bg-brand-white text-brand-black rounded-[20px] brutalist-border brutalist-shadow hover:brutalist-shadow-lg hover:-translate-y-1.5 hover:rotate-[-2deg] transition-all duration-300 interactive-hover"
             >
-              Connect
+              Connect Us
             </button>
           </Magnetic>
         </div>
 
-        {/* Center: Brand Credit */}
-        <div className="text-center font-bold text-sm tracking-widest uppercase text-brand-black/60">
+        {/* Center: Large bold credit text */}
+        <div className="font-heading font-black text-xl md:text-2xl tracking-tight text-brand-black uppercase text-center w-full md:w-auto">
           Powered & Secured by Zywo
         </div>
 
-        {/* Right: Social Square Buttons */}
-        <div className="flex items-center gap-4">
-          {socials.map((social) => {
+        {/* Right: Social Square Buttons (Instagram, Behance, Pinterest, LinkedIn) */}
+        <div className="flex items-center justify-center gap-4 shrink-0">
+          {socials.map((social, index) => {
             const Icon = social.icon;
+            // Alternating hover rotations for interest
+            const hoverRotate = index % 2 === 0 ? "hover:rotate-6" : "hover:rotate-[-6deg]";
             return (
               <Magnetic key={social.id}>
                 <a
@@ -64,7 +67,7 @@ export default function WaveFooter({ onConnectClick }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  className="w-12 h-12 bg-brand-white text-brand-black border-[4px] border-brand-black rounded-[8px] brutalist-shadow-sm flex items-center justify-center text-xl transition-all duration-200 hover:-translate-y-2 hover:bg-brand-black hover:text-brand-white hover:brutalist-shadow active:translate-y-0 interactive-hover"
+                  className={`w-14 h-14 bg-brand-white text-brand-black border-[4px] border-brand-black rounded-[12px] brutalist-shadow-sm flex items-center justify-center text-2xl transition-all duration-300 hover:-translate-y-2 ${hoverRotate} hover:bg-brand-black hover:text-brand-white hover:brutalist-shadow active:translate-y-0 interactive-hover`}
                 >
                   <Icon />
                 </a>

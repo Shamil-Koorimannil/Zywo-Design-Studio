@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaInstagram, FaBehance, FaPinterest, FaLinkedin } from "react-icons/fa";
 import { FiMail, FiX } from "react-icons/fi";
@@ -20,123 +20,97 @@ export default function ConnectPopup({ isOpen, setIsOpen }) {
     if (!isOpen) return;
 
     const handleOutsideClick = (e) => {
-      if (popupRef.current && !popupRef.current.contains(e.target) && !e.target.closest("#footer-connect-btn")) {
+      if (
+        popupRef.current && 
+        !popupRef.current.contains(e.target) && 
+        !e.target.closest("#footer-connect-btn")
+      ) {
         setIsOpen(false);
       }
     };
 
-    window.addEventListener("click", handleOutsideClick);
-    return () => window.removeEventListener("click", handleOutsideClick);
+    window.addEventListener("mousedown", handleOutsideClick);
+    return () => window.removeEventListener("mousedown", handleOutsideClick);
   }, [isOpen, setIsOpen]);
 
-  // Radius for radial expansion
-  const radius = 130; // pixels
-
-  // Define radial coordinates (quarter-circle from 180 to 270 degrees)
-  const getCoordinates = (index, total) => {
-    // Distribute angles between 180 and 270 degrees
-    const startAngle = 180 * (Math.PI / 180);
-    const endAngle = 270 * (Math.PI / 180);
-    const angleStep = (endAngle - startAngle) / (total - 1);
-    const angle = startAngle + index * angleStep;
-
-    return {
-      x: radius * Math.cos(angle),
-      y: radius * Math.sin(angle)
-    };
-  };
-
   return (
-    <div ref={popupRef} className="fixed bottom-8 right-8 z-[100] select-none">
-      {/* Radial Social Icons Container */}
-      <AnimatePresence>
-        {isOpen && (
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-0 h-0">
-            {SOCIALS.map((social, index) => {
-              const { x, y } = getCoordinates(index, SOCIALS.length);
-              const Icon = social.icon;
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-brand-black/50 backdrop-blur-xs select-none">
+          {/* Spring-animated Neo Brutalist Card */}
+          <motion.div
+            ref={popupRef}
+            initial={{ scale: 0.4, rotate: -5, opacity: 0 }}
+            animate={{ 
+              scale: 1, 
+              rotate: 0, 
+              opacity: 1,
+              transition: {
+                type: "spring",
+                stiffness: 280,
+                damping: 20
+              }
+            }}
+            exit={{ 
+              scale: 0.4, 
+              rotate: 5, 
+              opacity: 0,
+              transition: {
+                duration: 0.2,
+                ease: "easeOut"
+              }
+            }}
+            className="w-[90vw] max-w-md bg-brand-white p-8 rounded-[28px] brutalist-border brutalist-shadow-lg relative"
+          >
+            {/* Close Circle Button */}
+            <button
+              onClick={() => setIsOpen(false)}
+              className="absolute top-4 right-4 w-10 h-10 border-3 border-brand-black rounded-full flex items-center justify-center bg-brand-white text-brand-black hover:bg-brand-black hover:text-brand-white hover:-translate-y-0.5 transition-all duration-200 interactive-hover"
+              aria-label="Close connection panel"
+            >
+              <FiX className="text-xl" />
+            </button>
 
-              return (
-                <motion.a
-                  key={social.id}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={social.label}
-                  initial={{ x: 0, y: 0, scale: 0, rotate: -45 }}
-                  animate={{
-                    x: x,
-                    y: y,
-                    scale: 1,
-                    rotate: 0,
-                    transition: {
-                      type: "spring",
-                      stiffness: 280,
-                      damping: 18,
-                      delay: index * 0.05
-                    }
-                  }}
-                  exit={{
-                    x: 0,
-                    y: 0,
-                    scale: 0,
-                    rotate: 45,
-                    transition: {
-                      type: "spring",
-                      stiffness: 300,
-                      damping: 22,
-                      delay: (SOCIALS.length - 1 - index) * 0.03
-                    }
-                  }}
-                  onClick={() => setIsOpen(false)}
-                  className="absolute w-14 h-14 bg-brand-white text-brand-black border-4 border-brand-black rounded-[12px] brutalist-shadow-sm hover:brutalist-shadow hover:-translate-y-1 flex items-center justify-center text-2xl -translate-x-1/2 -translate-y-1/2 hover:bg-brand-black hover:text-brand-white transition-colors duration-200 interactive-hover"
-                >
-                  <Icon />
-                </motion.a>
-              );
-            })}
-          </div>
-        )}
-      </AnimatePresence>
+            {/* Header Title */}
+            <h3 className="font-heading font-black text-3xl text-brand-black mb-6 mt-2 text-center uppercase tracking-tight">
+              Connect With Us
+            </h3>
 
-      {/* Main floating action button */}
-      <Magnetic>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsOpen(!isOpen);
-          }}
-          aria-label={isOpen ? "Close connections menu" : "Open connections menu"}
-          className="relative group flex items-center justify-center w-16 h-16 bg-brand-white text-brand-black rounded-full brutalist-border brutalist-shadow hover:brutalist-shadow-lg hover:-translate-y-1 transition-all duration-300 interactive-hover"
-        >
-          {/* Morphing icon/text container */}
-          <AnimatePresence mode="wait">
-            {isOpen ? (
-              <motion.div
-                key="close-icon"
-                initial={{ rotate: -90, scale: 0 }}
-                animate={{ rotate: 0, scale: 1 }}
-                exit={{ rotate: 90, scale: 0 }}
-                transition={{ duration: 0.2 }}
-                className="text-2xl font-black"
-              >
-                <FiX />
-              </motion.div>
-            ) : (
-              <motion.span
-                key="connect-text"
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.8, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="text-sm font-black uppercase tracking-wider group-hover:scale-110 transition-transform duration-200"
-              >
-                CNCT
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </button>
-      </Magnetic>
-    </div>
+            {/* Social List */}
+            <div className="flex flex-col gap-4">
+              {SOCIALS.map((social) => {
+                const Icon = social.icon;
+                return (
+                  <Magnetic key={social.id}>
+                    <a
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => {
+                        // Close automatically after selecting a platform
+                        setTimeout(() => setIsOpen(false), 250);
+                      }}
+                      className="group flex items-center justify-between p-4 bg-brand-white border-3 border-brand-black rounded-xl brutalist-shadow-sm hover:brutalist-shadow hover:-translate-y-1 hover:bg-brand-black hover:text-brand-white transition-all duration-200 interactive-hover"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-lg bg-brand-offwhite border-2 border-brand-black text-brand-black flex items-center justify-center text-xl group-hover:bg-brand-white group-hover:text-brand-black transition-colors duration-200">
+                          <Icon />
+                        </div>
+                        <span className="font-sans font-black text-lg md:text-xl">
+                          {social.label}
+                        </span>
+                      </div>
+                      <span className="text-sm font-black opacity-0 group-hover:opacity-100 transition-opacity duration-200 uppercase tracking-widest">
+                        Open &rarr;
+                      </span>
+                    </a>
+                  </Magnetic>
+                );
+              })}
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
   );
 }

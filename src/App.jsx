@@ -6,9 +6,11 @@ import Lenis from "lenis";
 import HeroSection from "./sections/HeroSection";
 import ProjectsSection from "./sections/ProjectsSection";
 import ServicesSection from "./sections/ServicesSection";
-import ContactSection from "./sections/ContactSection";
+import WaveFooter from "./components/WaveFooter";
 import CustomCursor from "./components/CustomCursor";
 import ConnectPopup from "./components/ConnectPopup";
+
+import zywoLogo from "./assets/Zywo logo Design studio.jpeg";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,8 +27,8 @@ export default function App() {
   useEffect(() => {
     // 1. Initialize Lenis Smooth Scroll
     const lenis = new Lenis({
-      duration: 1.4,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential easing for heavy organic physics
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential easing
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
@@ -46,40 +48,36 @@ export default function App() {
 
     gsap.ticker.lagSmoothing(0);
 
-    // 2. Build the GSAP ScrollTrigger Drag Timeline
+    // 2. Build the GSAP ScrollTrigger stacked paper transition
     const ctx = gsap.context(() => {
-      const sections = [
-        section1Ref.current,
-        section2Ref.current,
-        section3Ref.current,
-        section4Ref.current
-      ];
+      // Flowing stacked paper animation helper
+      const animateSection = (el) => {
+        if (!el) return;
+        gsap.fromTo(el,
+          {
+            y: 80,
+            scale: 0.98,
+            opacity: 0.95,
+          },
+          {
+            y: 0,
+            scale: 1,
+            opacity: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: el,
+              start: "top bottom", // Starts when top of section enters viewport bottom
+              end: "top top",      // Completes when top of section reaches viewport top
+              scrub: true,         // scrub linking to scroll
+            }
+          }
+        );
+      };
 
-      // Create a master timeline linked to scroll pinning
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: "+=300%", // 3 full transitions
-          scrub: 1.2, // adds physics-like inertia to the drag
-          pin: true,
-          anticipatePin: 1,
-        }
-      });
-
-      // Drag transitions: Active section translates up -100% to reveal the section below
-      tl.to(section1Ref.current, {
-        yPercent: -100,
-        ease: "none",
-      })
-      .to(section2Ref.current, {
-        yPercent: -100,
-        ease: "none",
-      })
-      .to(section3Ref.current, {
-        yPercent: -100,
-        ease: "none",
-      });
+      // Animate the subsequent sections as they enter the screen
+      animateSection(section2Ref.current);
+      animateSection(section3Ref.current);
+      animateSection(section4Ref.current);
       
     }, containerRef);
 
@@ -94,18 +92,21 @@ export default function App() {
     };
   }, []);
 
-  // Smooth navigation helper
+  // Smooth navigation helper using Lenis scrollTo
   const scrollToSection = (sectionIndex) => {
     if (!lenisRef.current) return;
     
-    // Total height is scrollable height which matches 3 transitions (3 * innerHeight)
-    const targetScroll = sectionIndex * window.innerHeight;
+    let target = null;
+    if (sectionIndex === 1) target = section2Ref.current;
+    if (sectionIndex === 2) target = section3Ref.current;
     
-    lenisRef.current.scrollTo(targetScroll, {
-      duration: 1.8,
-      force: true,
-      ease: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    });
+    if (target) {
+      lenisRef.current.scrollTo(target, {
+        duration: 1.4,
+        offset: 0,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      });
+    }
   };
 
   return (
@@ -113,15 +114,29 @@ export default function App() {
       {/* Dynamic Custom Cursor */}
       <CustomCursor />
 
+      {/* Premium Floating Header */}
+      <header className="fixed top-6 left-6 z-50 md:top-8 md:left-8">
+        <div className="flex items-center gap-4 bg-brand-white/85 backdrop-blur-md px-4 py-3 rounded-2xl brutalist-border brutalist-shadow-sm interactive-hover">
+          <img 
+            src={zywoLogo} 
+            alt="Zywo Logo" 
+            className="w-10 h-10 md:w-12 md:h-12 object-cover rounded-xl border-2 border-brand-black"
+          />
+          <span className="font-heading font-black tracking-tight text-brand-black text-lg md:text-xl">
+            Zywo Design Studio
+          </span>
+        </div>
+      </header>
+
       {/* Main Multi-Section Scroll Container */}
       <div 
         ref={containerRef} 
-        className="relative w-full h-screen overflow-hidden select-none bg-brand-black"
+        className="relative w-full select-none bg-brand-offwhite"
       >
         {/* Section 1: Hero */}
         <div 
           ref={section1Ref} 
-          className="absolute inset-0 w-full h-full z-40 section-container"
+          className="relative w-full z-10"
         >
           <HeroSection onScrollToProjects={() => scrollToSection(1)} />
         </div>
@@ -129,7 +144,7 @@ export default function App() {
         {/* Section 2: Projects */}
         <div 
           ref={section2Ref} 
-          className="absolute inset-0 w-full h-full z-30 section-container"
+          className="relative w-full z-20 section-container"
         >
           <ProjectsSection onScrollToServices={() => scrollToSection(2)} />
         </div>
@@ -137,17 +152,17 @@ export default function App() {
         {/* Section 3: Services */}
         <div 
           ref={section3Ref} 
-          className="absolute inset-0 w-full h-full z-20 section-container"
+          className="relative w-full z-30 section-container"
         >
-          <ServicesSection onScrollToContact={() => scrollToSection(3)} />
+          <ServicesSection />
         </div>
 
-        {/* Section 4: Contact & Footer */}
+        {/* Section 4: Footer */}
         <div 
           ref={section4Ref} 
-          className="absolute inset-0 w-full h-full z-10 section-container"
+          className="relative w-full z-40 section-container"
         >
-          <ContactSection onConnectClick={() => setIsConnectOpen(true)} />
+          <WaveFooter onConnectClick={() => setIsConnectOpen(true)} />
         </div>
       </div>
 

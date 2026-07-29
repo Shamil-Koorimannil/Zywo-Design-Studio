@@ -46,7 +46,7 @@ export default function CustomCursor() {
         });
         gsap.to(innerRef.current, { 
           scale: 0.5, 
-          backgroundColor: "#2596be",
+          backgroundColor: "#3c4684",
           duration: 0.2 
         });
       };
