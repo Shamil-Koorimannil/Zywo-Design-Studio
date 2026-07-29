@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;700;800&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Outfit", system-ui, sans-serif;
+  --font-heading: "Plus Jakarta Sans", system-ui, sans-serif;
+  
+  --color-brand-blue: #2596be;
+  --color-brand-purple: #6f7bb2;
+  --color-brand-white: #ffffff;
+  --color-brand-black: #111111;
+  --color-brand-offwhite: #f8f8f8;
+}
+
+@utility brutalist-border {
+  border: 5px solid #111111;
+}
+
+@utility brutalist-shadow {
+  box-shadow: 8px 8px 0px 0px #111111;
+}
+
+@utility brutalist-shadow-lg {
+  box-shadow: 16px 16px 0px 0px #111111;
+}
+
+@utility brutalist-shadow-sm {
+  box-shadow: 4px 4px 0px 0px #111111;
+}
+
+@utility brutalist-gradient {
+  background-image: linear-gradient(90deg, #2596be, #6f7bb2, #ffffff);
+}
+
+/* Custom Scrollbar for Lenis */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Hide default cursor globally, as we have a custom cursor */
+@media (pointer: fine) {
+  body, button, a, [role="button"] {
+    cursor: none !important;
+  }
+}
+
+/* Basic Reset */
+body {
+  background-color: #f8f8f8;
+  color: #111111;
+  overflow-x: hidden;
+  font-family: "Outfit", system-ui, sans-serif;
+}
+
+/* Custom styles for animations & layout */
+.section-container {
+  will-change: transform;
+}
+
+/* Focus States for Accessibility */
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline: 3px solid #2596be;
+  outline-offset: 4px;
+}
+
+/* Custom Brutalist Scrollbar */
+.brutalist-scrollbar::-webkit-scrollbar {
+  width: 12px;
+}
+
+.brutalist-scrollbar::-webkit-scrollbar-track {
+  background: #f8f8f8;
+  border-left: 4px solid #111111;
+}
+
+.brutalist-scrollbar::-webkit-scrollbar-thumb {
+  background: #111111;
+  border: 3px solid #f8f8f8;
+  border-radius: 6px;
+}
+
+.brutalist-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #2596be;
+}
+
+/* Hide scrollbar for standard containers if needed */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
