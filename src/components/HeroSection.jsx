@@ -1,7 +1,6 @@
 import React from "react";
 import { FiArrowDown, FiArrowRight } from "react-icons/fi";
 import Magnetic from "./Magnetic";
-import heroPortrait from "../assets/rayan/hero-portrait.png";
 
 export default function HeroSection({ onScrollToWork, onConnectClick }) {
   return (
@@ -73,7 +72,7 @@ export default function HeroSection({ onScrollToWork, onConnectClick }) {
             {/* Portrait Frame */}
             <div className="w-full h-full rounded-[32px] border-[3px] border-[#222222] bg-[#DE4A82] overflow-hidden relative shadow-[8px_8px_0px_0px_#222222] interactive-hover">
               <img
-                src={heroPortrait}
+                src="/Rayan-hany-a.jpg"
                 alt="Rayan Hany Cinematic Portrait"
                 className="w-full h-full object-cover grayscale brightness-105"
               />
