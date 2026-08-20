@@ -1,38 +1,51 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;900&display=swap');
 
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Outfit", system-ui, sans-serif;
-  --font-heading: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-heading: "Space Grotesk", system-ui, sans-serif;
   
-  --color-brand-blue: #3c4684; /* Primary Dark */
-  --color-brand-purple: #777ea9; /* Primary Light */
-  --color-brand-dark: #3c4684;
-  --color-brand-light: #777ea9;
+  --color-brand-blue: #8FA4D8;
+  --color-brand-teal: #319C97;
+  --color-brand-pink: #DE4A82;
+  --color-brand-yellow: #FFD45C;
+  --color-brand-purple: #8A63D2;
+  --color-brand-green: #52B879;
+  
+  --color-brand-dark: #222222;
+  --color-brand-light: #F7F6F2;
   --color-brand-white: #ffffff;
-  --color-brand-black: #111111;
-  --color-brand-offwhite: #f8f8f8;
+  --color-brand-black: #222222; /* Primary text/borders */
+  --color-brand-offwhite: #F3E8D9; /* Page outer background */
+  
+  --color-bg-secondary: #F4F3EF; /* Frame inner background */
+  --color-bg-hover: #EFE3D2;
+  --color-text-secondary: #555555;
 }
 
 @utility brutalist-border {
-  border: 5px solid #111111;
+  border: 3px solid var(--color-brand-black);
+}
+
+@utility brutalist-border-sm {
+  border: 2px solid var(--color-brand-black);
 }
 
 @utility brutalist-shadow {
-  box-shadow: 8px 8px 0px 0px #111111;
+  box-shadow: 7px 7px 0px 0px var(--color-brand-black);
 }
 
 @utility brutalist-shadow-lg {
-  box-shadow: 16px 16px 0px 0px #111111;
+  box-shadow: 12px 12px 0px 0px var(--color-brand-black);
 }
 
 @utility brutalist-shadow-sm {
-  box-shadow: 4px 4px 0px 0px #111111;
+  box-shadow: 4px 4px 0px 0px var(--color-brand-black);
 }
 
 @utility brutalist-gradient {
-  background-image: linear-gradient(90deg, #3c4684, #777ea9);
+  background-color: var(--color-brand-yellow);
 }
 
 /* Custom Scrollbar for Lenis */
@@ -56,6 +69,12 @@ html.lenis, html.lenis body {
   pointer-events: none;
 }
 
+/* Custom selection styling */
+::selection {
+  background-color: var(--color-brand-yellow);
+  color: var(--color-brand-dark);
+}
+
 /* Hide default cursor globally, as we have a custom cursor */
 @media (pointer: fine) {
   body, button, a, [role="button"] {
@@ -65,10 +84,10 @@ html.lenis, html.lenis body {
 
 /* Basic Reset */
 body {
-  background-color: #f8f8f8;
-  color: #111111;
+  background-color: var(--color-brand-offwhite);
+  color: var(--color-brand-dark);
   overflow-x: hidden;
-  font-family: "Outfit", system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
 }
 
 /* Custom styles for animations & layout */
@@ -77,8 +96,8 @@ body {
 }
 
 /* Focus States for Accessibility */
-a:focus-visible, button:focus-visible, input:focus-visible {
-  outline: 3px solid #3c4684;
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 3px solid var(--color-brand-dark);
   outline-offset: 4px;
 }
 
@@ -88,18 +107,18 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 }
 
 .brutalist-scrollbar::-webkit-scrollbar-track {
-  background: #f8f8f8;
-  border-left: 4px solid #111111;
+  background: var(--color-brand-offwhite);
+  border-left: 3px solid var(--color-brand-dark);
 }
 
 .brutalist-scrollbar::-webkit-scrollbar-thumb {
-  background: #111111;
-  border: 3px solid #f8f8f8;
-  border-radius: 6px;
+  background: var(--color-brand-dark);
+  border: 2px solid var(--color-brand-offwhite);
+  border-radius: 0px;
 }
 
 .brutalist-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #3c4684;
+  background: var(--color-brand-yellow);
 }
 
 /* Hide scrollbar for standard containers if needed */
@@ -127,4 +146,5 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 .float-idle {
   animation: floatAnimation 5s ease-in-out infinite;
 }
+
 

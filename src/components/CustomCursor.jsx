@@ -40,13 +40,13 @@ export default function CustomCursor() {
       const handleMouseEnter = () => {
         gsap.to(outerRef.current, { 
           scale: 1.6, 
-          backgroundColor: "rgba(255, 255, 255, 0.2)",
-          borderColor: "#111111",
+          backgroundColor: "rgba(34, 34, 34, 0.08)",
+          borderColor: "#222222",
           duration: 0.2 
         });
         gsap.to(innerRef.current, { 
           scale: 0.5, 
-          backgroundColor: "#3c4684",
+          backgroundColor: "#222222",
           duration: 0.2 
         });
       };
@@ -55,12 +55,12 @@ export default function CustomCursor() {
         gsap.to(outerRef.current, { 
           scale: 1, 
           backgroundColor: "transparent",
-          borderColor: "#111111",
+          borderColor: "#222222",
           duration: 0.2 
         });
         gsap.to(innerRef.current, { 
           scale: 1, 
-          backgroundColor: "#ffffff",
+          backgroundColor: "#222222",
           duration: 0.2 
         });
       };
@@ -100,17 +100,17 @@ export default function CustomCursor() {
 
   return (
     <>
-      {/* Inner white circle */}
+      {/* Inner charcoal circle */}
       <div
         ref={innerRef}
         id="cursor-inner"
-        className="fixed top-0 left-0 w-2 h-2 bg-white rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 mix-blend-difference hidden md:block"
+        className="fixed top-0 left-0 w-2 h-2 bg-[#222222] rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 hidden md:block"
       />
-      {/* Outer black ring */}
+      {/* Outer charcoal ring */}
       <div
         ref={outerRef}
         id="cursor-outer"
-        className="fixed top-0 left-0 w-8 h-8 border-2 border-[#111111] rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 hidden md:block"
+        className="fixed top-0 left-0 w-8 h-8 border-2 border-[#222222] rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 hidden md:block"
       />
     </>
   );
